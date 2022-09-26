@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pycertmanager"
+version = "0.0.1"
+authors = [{ name = "Elder Santos", email = "elder_rn@hotmail.com" }]
+description = "Module to assist in the programmatic management of PFX and P12 digital certificates"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Security",
+]
+dependencies = ["cryptography >= 38.0.1"]
+
+[project.optional-dependencies]
+build = ["build", "twine"]
+dev = ["black", "bumpver"]
+
+[project.urls]
+"Homepage" = "https://github.com/eldersantoss/pycertmanager"
+"Bug Tracker" = "https://github.com/eldersantoss/pycertmanager/issues"
+
+[tool.bumpver]
+current_version = "0.0.1"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
+"src/pycertmanager/__init__.py" = ["{version}"]
