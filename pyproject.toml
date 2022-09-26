@@ -8,12 +8,11 @@ version = "0.0.1"
 authors = [{ name = "Elder Santos", email = "elder_rn@hotmail.com" }]
 description = "Module to assist in the programmatic management of PFX and P12 digital certificates"
 readme = "README.md"
-license = { file = "LICENSE" }
+license = { text = "MIT" }
 requires-python = ">=3.10"
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3",
-  "Operating System :: OS Independent",
   "Topic :: Security",
 ]
 dependencies = ["cryptography >= 38.0.1"]
