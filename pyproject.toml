@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pycertmanager"
-version = "0.0.1"
+version = "0.0.2"
 authors = [{ name = "Elder Santos", email = "elder_rn@hotmail.com" }]
 description = "Module to assist in the programmatic management of PFX and P12 digital certificates"
 readme = "README.md"
@@ -26,7 +26,7 @@ dev = ["black", "bumpver"]
 "Bug Tracker" = "https://github.com/eldersantoss/pycertmanager/issues"
 
 [tool.bumpver]
-current_version = "0.0.1"
+current_version = "0.0.2"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = false
