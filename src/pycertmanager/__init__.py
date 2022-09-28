@@ -3,6 +3,8 @@ __version__ = "0.0.2"
 import subprocess
 from pathlib import Path
 
+from cryptography.hazmat.primitives.serialization import pkcs12
+
 
 class Certificate:
     def __init__(
@@ -12,6 +14,13 @@ class Certificate:
     ) -> None:
         self._certificate_path = certificate_path
         self._password = password
+        self._certificate_object = None
+        if self._certificate_path is not None:
+            with open(self._certificate_path, "rb") as certificate_data:
+                _, self._certificate_object, _ = pkcs12.load_key_and_certificates(
+                    certificate_data.read(),
+                    bytes(self._password, "utf-8"),
+                )
 
     def install(
         self,
@@ -35,3 +44,9 @@ class Certificate:
         command = f"powershell.exe Get-ChildItem {store_location} |"
         command += f" Where-Object Subject -match 'CN={cn}' | Remove-Item"
         subprocess.run(command, capture_output=not verbose)
+
+    def get_subject_data(self) -> list[str]:
+        """Returns a list with subject data of certificate"""
+        if self._certificate_object is not None:
+            return [c.rfc4514_string() for c in self._certificate_object.subject.rdns]
+        return []
