@@ -1,5 +1,6 @@
 import unittest
 import subprocess
+from datetime import datetime
 
 from pycertmanager import Certificate
 
@@ -31,7 +32,7 @@ class TestCertificate(unittest.TestCase):
             "Number of installed certificates must have been incremented",
         )
 
-        # removing installed certificate
+        # removing test certificate
         self._remove_test_certificate()
 
     def test_remove(self):
@@ -59,6 +60,7 @@ class TestCertificate(unittest.TestCase):
 
     def test_get_subject_data(self):
         """Test if subject data is returned correctly"""
+
         # ensuring that test certificate is installed
         self._install_test_certificate()
 
@@ -90,6 +92,35 @@ class TestCertificate(unittest.TestCase):
             [],
             "Subject data must be empty",
         )
+
+        # removing test certificate
+        self._remove_test_certificate()
+
+    def test_get_expiration_date(self):
+        """Test if expiration date is returned correctly"""
+
+        # ensuring that test certificate is installed
+        self._install_test_certificate()
+
+        # instantiating bound Certificate object
+        certificate = Certificate(
+            "assets/pycertmanager_test_password_123456.pfx",
+            "123456",
+        )
+        correct_date = datetime(2023, 9, 28, 4, 6, 8)
+
+        # getting expiration date
+        expiration_date = certificate.get_expiration_date()
+
+        # checking if it's correct
+        self.assertEqual(
+            expiration_date,
+            correct_date,
+            f"Expiration date must have been {correct_date}",
+        )
+
+        # removing test certificate
+        self._remove_test_certificate()
 
     def _get_number_of_installed_certificates(self) -> int:
         """Help function to get number of installed certificates"""
