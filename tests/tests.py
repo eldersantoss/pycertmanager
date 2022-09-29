@@ -122,6 +122,32 @@ class TestCertificate(unittest.TestCase):
         # removing test certificate
         self._remove_test_certificate()
 
+    def test_get_expedition_date(self):
+        """Test if expiration date is returned correctly"""
+
+        # ensuring that test certificate is installed
+        self._install_test_certificate()
+
+        # instantiating bound Certificate object
+        certificate = Certificate(
+            "assets/pycertmanager_test_password_123456.pfx",
+            "123456",
+        )
+        correct_date = datetime(2022, 9, 28, 3, 46, 8)
+
+        # getting expiration date
+        expedition_date = certificate.get_expedition_date()
+
+        # checking if it's correct
+        self.assertEqual(
+            expedition_date,
+            correct_date,
+            f"Expiration date must have been {correct_date}",
+        )
+
+        # removing test certificate
+        self._remove_test_certificate()
+
     def _get_number_of_installed_certificates(self) -> int:
         """Help function to get number of installed certificates"""
         command = "powershell.exe Get-ChildItem Cert:\CurrentUser\My"
