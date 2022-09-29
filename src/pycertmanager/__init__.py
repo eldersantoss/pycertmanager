@@ -56,3 +56,8 @@ class Certificate:
         if self._certificate_object is not None:
             return self._certificate_object.not_valid_after
         return None
+
+    def get_expedition_date(self) -> datetime:
+        if self._certificate_object is not None:
+            return self._certificate_object.not_valid_before
+        return None
