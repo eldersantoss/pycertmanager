@@ -2,6 +2,7 @@ __version__ = "0.0.2"
 
 import subprocess
 from pathlib import Path
+from datetime import datetime
 
 from cryptography.hazmat.primitives.serialization import pkcs12
 
@@ -50,3 +51,8 @@ class Certificate:
         if self._certificate_object is not None:
             return [c.rfc4514_string() for c in self._certificate_object.subject.rdns]
         return []
+
+    def get_expiration_date(self) -> datetime:
+        if self._certificate_object is not None:
+            return self._certificate_object.not_valid_after
+        return None
