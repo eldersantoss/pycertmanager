@@ -8,12 +8,11 @@ class TestCertificate(unittest.TestCase):
     def test_install(self):
         """Test if certificate has been installed correctly"""
 
+        # ensuring that test certificate is not installed
+        self._remove_test_certificate()
+
         # getting number of certificates before installing
-        command = "powershell.exe Get-ChildItem Cert:\CurrentUser\My"
-        result = subprocess.run(command, capture_output=True)
-        old_num_of_certificates = len(
-            result.stdout.decode("utf-8").strip().splitlines()
-        )
+        old_num_of_certificates = self._get_number_of_installed_certificates()
 
         # instantiating Certificate object and installing it
         certificate = Certificate(
@@ -23,10 +22,7 @@ class TestCertificate(unittest.TestCase):
         certificate.install()
 
         # getting number of certificates after installing
-        result = subprocess.run(command, capture_output=True)
-        new_num_of_certificates = len(
-            result.stdout.decode("utf-8").strip().splitlines()
-        )
+        new_num_of_certificates = self._get_number_of_installed_certificates()
 
         # comparing them
         self.assertGreater(
@@ -36,13 +32,11 @@ class TestCertificate(unittest.TestCase):
         )
 
         # removing installed certificate
-        subprocess.run(
-            "powershell.exe Get-ChildItem Cert:\CurrentUser\My | Where-Object {$_.Subject -match 'pycertmanager.test'} | Remove-Item",
-            capture_output=True,
-        )
+        self._remove_test_certificate()
 
     def test_remove(self):
         """Test if certificate has been removed correctly"""
+
         # ensuring that test certificate is installed
         self._install_test_certificate()
 
@@ -115,7 +109,7 @@ class TestCertificate(unittest.TestCase):
         subprocess.run(command, capture_output=True)
 
     def _remove_test_certificate(self) -> None:
-        """Help function to install test certificate"""
+        """Help function to remove test certificate"""
         subprocess.run(
             "powershell.exe Get-ChildItem Cert:\CurrentUser\My | Where-Object Subject -match 'pycertmanager.test' | Remove-Item",
             capture_output=True,
