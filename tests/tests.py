@@ -3,6 +3,7 @@ import subprocess
 from datetime import datetime
 
 from pycertmanager import Certificate
+from pycertmanager.exceptions import InvalidCertificatePath, InvalidCertificatePassword
 
 
 class TestCertificate(unittest.TestCase):
@@ -34,6 +35,26 @@ class TestCertificate(unittest.TestCase):
         self.assertIsNone(certificate._path, "_path attribute must be None")
         self.assertIsNone(certificate._password, "_password attribute must be None")
         self.assertIsNone(certificate._object, "_object attribute must not be None")
+
+    def test_constructor_with_invalid_path(self):
+        """Tests if constructor raises InvalidCertificatePath exception"""
+
+        with self.assertRaises(InvalidCertificatePath):
+            Certificate("", "123456")
+        with self.assertRaises(InvalidCertificatePath):
+            Certificate(0, "123456")
+        with self.assertRaises(InvalidCertificatePath):
+            Certificate(True, "123456")
+
+    def test_constructor_with_invalid_password(self):
+        """Tests if constructor raises InvalidCertificatePassword exception"""
+
+        with self.assertRaises(InvalidCertificatePassword):
+            Certificate("assets/pycertmanager_test_password_123456.pfx", "123")
+        with self.assertRaises(InvalidCertificatePassword):
+            Certificate("assets/pycertmanager_test_password_123456.pfx", 123)
+        with self.assertRaises(InvalidCertificatePassword):
+            Certificate("assets/pycertmanager_test_password_123456.pfx", True)
 
     def test_install(self):
         """Test if certificate has been installed correctly"""

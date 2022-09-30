@@ -6,6 +6,8 @@ from datetime import datetime
 
 from cryptography.hazmat.primitives.serialization import pkcs12
 
+from pycertmanager.exceptions import InvalidCertificatePath, InvalidCertificatePassword
+
 
 class Certificate:
     def __init__(
@@ -16,6 +18,16 @@ class Certificate:
         self._path = certificate_path
         self._password = password
         self._object = None
+        try:
+            self._validate_kwargs_and_read_certificate()
+        except FileNotFoundError as exc:
+            raise InvalidCertificatePath() from exc
+        except (ValueError, TypeError) as exc:
+            raise InvalidCertificatePassword() from exc
+
+    def _validate_kwargs_and_read_certificate(self) -> None:
+        if type(self._path) not in [str, Path, type(None)]:
+            raise InvalidCertificatePath()
         if self._path is not None:
             with open(self._path, "rb") as certificate_data:
                 _, self._object, _ = pkcs12.load_key_and_certificates(
