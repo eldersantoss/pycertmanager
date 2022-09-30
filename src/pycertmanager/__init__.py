@@ -2,14 +2,25 @@ __version__ = "0.0.2"
 
 import subprocess
 from pathlib import Path
+from typing import Literal
 from datetime import datetime
 
 from cryptography.hazmat.primitives.serialization import pkcs12
 
-from pycertmanager.exceptions import InvalidCertificatePath, InvalidCertificatePassword
+from pycertmanager.exceptions import (
+    InvalidCertificatePath,
+    InvalidCertificatePassword,
+    InvalidStoreLocation,
+)
 
 
 class Certificate:
+
+    STORE_LOCATIONS = {
+        "user": "Cert:\CurrentUser\My",
+        "machine": "Cert:\LocalMachine\My",
+    }
+
     def __init__(
         self,
         certificate_path: str | Path | None = None,
@@ -37,24 +48,32 @@ class Certificate:
 
     def install(
         self,
-        store_location="Cert:\CurrentUser\My",
-        exportable=False,
-        verbose=False,
-    ):
+        store_location: Literal["user", "machine"] = "user",
+        exportable: bool = False,
+        verbose: bool = False,
+    ) -> None:
         """Install certificate"""
+        try:
+            store_location_value = self.STORE_LOCATIONS[store_location]
+        except KeyError as exc:
+            raise InvalidStoreLocation() from exc
         command = f"powershell.exe $password=ConvertTo-SecureString -String '{self._password}' -AsPlainText -Force;"
         command += f" Import-PfxCertificate -FilePath {self._path} -Password $password"
-        command += f" -CertStoreLocation {store_location} {'-Exportable' if exportable else ''}"
+        command += f" -CertStoreLocation {store_location_value} {'-Exportable' if exportable else ''}"
         subprocess.run(command, capture_output=not verbose)
 
     def remove(
         self,
-        cn,
-        store_location="Cert:\CurrentUser\My",
-        verbose=False,
-    ):
+        cn: str,
+        store_location: Literal["user", "machine"] = "user",
+        verbose: bool = False,
+    ) -> None:
         """Search certificate by CN (Common Name) and remove it"""
-        command = f"powershell.exe Get-ChildItem {store_location} |"
+        try:
+            store_location_value = self.STORE_LOCATIONS[store_location]
+        except KeyError as exc:
+            raise InvalidStoreLocation() from exc
+        command = f"powershell.exe Get-ChildItem {store_location_value} |"
         command += f" Where-Object Subject -match 'CN={cn}' | Remove-Item"
         subprocess.run(command, capture_output=not verbose)
 

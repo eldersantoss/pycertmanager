@@ -3,7 +3,11 @@ import subprocess
 from datetime import datetime
 
 from pycertmanager import Certificate
-from pycertmanager.exceptions import InvalidCertificatePath, InvalidCertificatePassword
+from pycertmanager.exceptions import (
+    InvalidCertificatePath,
+    InvalidCertificatePassword,
+    InvalidStoreLocation,
+)
 
 
 class TestCertificate(unittest.TestCase):
@@ -85,6 +89,16 @@ class TestCertificate(unittest.TestCase):
         # removing test certificate
         self._remove_test_certificate()
 
+    def test_install_with_invalid_store_location(self):
+        """Tests if InvalidStoreLocation exception is raised"""
+
+        certificate = Certificate(
+            "assets/pycertmanager_test_password_123456.pfx",
+            "123456",
+        )
+        with self.assertRaises(InvalidStoreLocation):
+            certificate.install(store_location="")
+
     def test_remove(self):
         """Test if certificate has been removed correctly"""
 
@@ -96,7 +110,7 @@ class TestCertificate(unittest.TestCase):
 
         # instantiating Certificate object and removing test certificate
         certificate = Certificate()
-        certificate.remove(cn="pycertmanager.test")
+        certificate.remove("pycertmanager.test")
 
         # getting number of certificates after removing
         new_num_of_certificates = self._get_number_of_installed_certificates()
@@ -107,6 +121,13 @@ class TestCertificate(unittest.TestCase):
             new_num_of_certificates,
             "Number of installed certificates must have been decremented",
         )
+
+    def test_remove_with_invalid_store_location(self):
+        """Tests if InvalidStoreLocation exception is raised"""
+
+        certificate = Certificate()
+        with self.assertRaises(InvalidStoreLocation):
+            certificate.remove("", store_location="")
 
     def test_get_subject_data(self):
         """Test if subject data is returned correctly"""

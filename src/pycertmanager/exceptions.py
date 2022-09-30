@@ -14,3 +14,13 @@ class InvalidCertificatePassword(Exception):
 
     def __init__(self) -> None:
         super().__init__("Invalid password. Try again with the correct password.")
+
+
+class InvalidStoreLocation(Exception):
+    """Raised when trying to install certificate with invalid value to
+    store_location parameter"""
+
+    def __init__(self) -> None:
+        super().__init__(
+            "Invalid value for store_location. The value must be the string 'user' or 'machine'."
+        )
