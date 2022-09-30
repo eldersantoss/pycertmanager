@@ -78,17 +78,23 @@ class Certificate:
         subprocess.run(command, capture_output=not verbose)
 
     def get_subject_data(self) -> list[str]:
-        """Returns a list with subject data of certificate"""
+        """Returns a list with certificate's subject data. If the
+        certificate object is not file bound, returns an empty list"""
         if self._object is not None:
             return [c.rfc4514_string() for c in self._object.subject.rdns]
         return []
 
-    def get_expiration_date(self) -> datetime:
+    def get_expiration_date(self) -> datetime | None:
+        """Returns datetime object with certificate's experation date. If
+        the certificate object is not file bound, returns None"""
         if self._object is not None:
             return self._object.not_valid_after
         return None
 
-    def get_expedition_date(self) -> datetime:
+    def get_issue_date(self) -> datetime | None:
+        """Returns datetime object with a date the certificate was
+        issued. If the certificate object is not file bound, returns
+        None"""
         if self._object is not None:
             return self._object.not_valid_before
         return None

@@ -193,8 +193,8 @@ class TestCertificate(unittest.TestCase):
         # removing test certificate
         self._remove_test_certificate()
 
-    def test_get_expedition_date(self):
-        """Test if expiration date is returned correctly"""
+    def test_get_issue_date(self):
+        """Test if issue date is returned correctly"""
 
         # ensuring that test certificate is installed
         self._install_test_certificate()
@@ -207,13 +207,13 @@ class TestCertificate(unittest.TestCase):
         correct_date = datetime(2022, 9, 28, 3, 46, 8)
 
         # getting expiration date
-        expedition_date = certificate.get_expedition_date()
+        issue_date = certificate.get_issue_date()
 
         # checking if it's correct
         self.assertEqual(
-            expedition_date,
+            issue_date,
             correct_date,
-            f"Expiration date must have been {correct_date}",
+            f"Issue date must have been {correct_date}",
         )
 
         # removing test certificate
