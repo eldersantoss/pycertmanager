@@ -13,12 +13,12 @@ class Certificate:
         certificate_path: str | Path | None = None,
         password: str | None = None,
     ) -> None:
-        self._certificate_path = certificate_path
+        self._path = certificate_path
         self._password = password
-        self._certificate_object = None
-        if self._certificate_path is not None:
-            with open(self._certificate_path, "rb") as certificate_data:
-                _, self._certificate_object, _ = pkcs12.load_key_and_certificates(
+        self._object = None
+        if self._path is not None:
+            with open(self._path, "rb") as certificate_data:
+                _, self._object, _ = pkcs12.load_key_and_certificates(
                     certificate_data.read(),
                     bytes(self._password, "utf-8"),
                 )
@@ -31,7 +31,7 @@ class Certificate:
     ):
         """Install certificate"""
         command = f"powershell.exe $password=ConvertTo-SecureString -String '{self._password}' -AsPlainText -Force;"
-        command += f" Import-PfxCertificate -FilePath {self._certificate_path} -Password $password"
+        command += f" Import-PfxCertificate -FilePath {self._path} -Password $password"
         command += f" -CertStoreLocation {store_location} {'-Exportable' if exportable else ''}"
         subprocess.run(command, capture_output=not verbose)
 
@@ -48,16 +48,16 @@ class Certificate:
 
     def get_subject_data(self) -> list[str]:
         """Returns a list with subject data of certificate"""
-        if self._certificate_object is not None:
-            return [c.rfc4514_string() for c in self._certificate_object.subject.rdns]
+        if self._object is not None:
+            return [c.rfc4514_string() for c in self._object.subject.rdns]
         return []
 
     def get_expiration_date(self) -> datetime:
-        if self._certificate_object is not None:
-            return self._certificate_object.not_valid_after
+        if self._object is not None:
+            return self._object.not_valid_after
         return None
 
     def get_expedition_date(self) -> datetime:
-        if self._certificate_object is not None:
-            return self._certificate_object.not_valid_before
+        if self._object is not None:
+            return self._object.not_valid_before
         return None

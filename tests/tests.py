@@ -6,6 +6,35 @@ from pycertmanager import Certificate
 
 
 class TestCertificate(unittest.TestCase):
+    def test_constructor(self):
+        """Tests if certificate is created correctly"""
+
+        # test file bound certificate
+        certificate = Certificate(
+            "assets/pycertmanager_test_password_123456.pfx",
+            "123456",
+        )
+        self.assertEqual(
+            certificate._path,
+            "assets/pycertmanager_test_password_123456.pfx",
+            "_path attribute must be equal to test certificate path",
+        )
+        self.assertEqual(
+            certificate._password,
+            "123456",
+            "_password attribute must be equal to test certificate password",
+        )
+        self.assertIsNotNone(
+            certificate._object,
+            "_object attribute must not be None",
+        )
+
+        # test not file bound certificate
+        certificate = Certificate()
+        self.assertIsNone(certificate._path, "_path attribute must be None")
+        self.assertIsNone(certificate._password, "_password attribute must be None")
+        self.assertIsNone(certificate._object, "_object attribute must not be None")
+
     def test_install(self):
         """Test if certificate has been installed correctly"""
 
