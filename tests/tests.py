@@ -11,22 +11,24 @@ from pycertmanager.exceptions import (
 
 
 class TestCertificate(unittest.TestCase):
+
+    TEST_CERT_PATH = "tests/assets/pycertmanager_test_password_123456.pfx"
+    TEST_CERT_PASSWORD = "123456"
+    TEST_CERT_CN = "pycertmanager.test"
+    TEST_CERT_STORE_LOCATION = "Cert:\CurrentUser\My"
+
     def test_constructor(self):
         """Tests if certificate is created correctly"""
 
-        # test file bound certificate
-        certificate = Certificate(
-            "assets/pycertmanager_test_password_123456.pfx",
-            "123456",
-        )
+        certificate = Certificate(self.TEST_CERT_PATH, self.TEST_CERT_PASSWORD)
         self.assertEqual(
             certificate._path,
-            "assets/pycertmanager_test_password_123456.pfx",
+            self.TEST_CERT_PATH,
             "_path attribute must be equal to test certificate path",
         )
         self.assertEqual(
             certificate._password,
-            "123456",
+            self.TEST_CERT_PASSWORD,
             "_password attribute must be equal to test certificate password",
         )
         self.assertIsNotNone(
@@ -34,31 +36,29 @@ class TestCertificate(unittest.TestCase):
             "_object attribute must not be None",
         )
 
-        # test not file bound certificate
-        certificate = Certificate()
-        self.assertIsNone(certificate._path, "_path attribute must be None")
-        self.assertIsNone(certificate._password, "_password attribute must be None")
-        self.assertIsNone(certificate._object, "_object attribute must not be None")
-
     def test_constructor_with_invalid_path(self):
         """Tests if constructor raises InvalidCertificatePath exception"""
 
         with self.assertRaises(InvalidCertificatePath):
-            Certificate("", "123456")
+            Certificate(None, self.TEST_CERT_PASSWORD)
         with self.assertRaises(InvalidCertificatePath):
-            Certificate(0, "123456")
+            Certificate("", self.TEST_CERT_PASSWORD)
         with self.assertRaises(InvalidCertificatePath):
-            Certificate(True, "123456")
+            Certificate(0, self.TEST_CERT_PASSWORD)
+        with self.assertRaises(InvalidCertificatePath):
+            Certificate(True, self.TEST_CERT_PASSWORD)
 
     def test_constructor_with_invalid_password(self):
         """Tests if constructor raises InvalidCertificatePassword exception"""
 
         with self.assertRaises(InvalidCertificatePassword):
-            Certificate("assets/pycertmanager_test_password_123456.pfx", "123")
+            Certificate(self.TEST_CERT_PATH, None)
         with self.assertRaises(InvalidCertificatePassword):
-            Certificate("assets/pycertmanager_test_password_123456.pfx", 123)
+            Certificate(self.TEST_CERT_PATH, "123")
         with self.assertRaises(InvalidCertificatePassword):
-            Certificate("assets/pycertmanager_test_password_123456.pfx", True)
+            Certificate(self.TEST_CERT_PATH, 123)
+        with self.assertRaises(InvalidCertificatePassword):
+            Certificate(self.TEST_CERT_PATH, True)
 
     def test_install(self):
         """Test if certificate has been installed correctly"""
@@ -70,10 +70,7 @@ class TestCertificate(unittest.TestCase):
         old_num_of_certificates = self._get_number_of_installed_certificates()
 
         # instantiating Certificate object and installing it
-        certificate = Certificate(
-            "assets/pycertmanager_test_password_123456.pfx",
-            "123456",
-        )
+        certificate = Certificate(self.TEST_CERT_PATH, self.TEST_CERT_PASSWORD)
         certificate.install()
 
         # getting number of certificates after installing
@@ -92,10 +89,7 @@ class TestCertificate(unittest.TestCase):
     def test_install_with_invalid_store_location(self):
         """Tests if InvalidStoreLocation exception is raised"""
 
-        certificate = Certificate(
-            "assets/pycertmanager_test_password_123456.pfx",
-            "123456",
-        )
+        certificate = Certificate(self.TEST_CERT_PATH, self.TEST_CERT_PASSWORD)
         with self.assertRaises(InvalidStoreLocation):
             certificate.install(store_location="")
 
@@ -108,9 +102,8 @@ class TestCertificate(unittest.TestCase):
         # getting number of certificates before removing
         old_num_of_certificates = self._get_number_of_installed_certificates()
 
-        # instantiating Certificate object and removing test certificate
-        certificate = Certificate()
-        certificate.remove("pycertmanager.test")
+        # removing test certificate
+        Certificate.remove("pycertmanager.test")
 
         # getting number of certificates after removing
         new_num_of_certificates = self._get_number_of_installed_certificates()
@@ -125,9 +118,8 @@ class TestCertificate(unittest.TestCase):
     def test_remove_with_invalid_store_location(self):
         """Tests if InvalidStoreLocation exception is raised"""
 
-        certificate = Certificate()
         with self.assertRaises(InvalidStoreLocation):
-            certificate.remove("", store_location="")
+            Certificate.remove("", store_location="")
 
     def test_get_subject_data(self):
         """Test if subject data is returned correctly"""
@@ -135,11 +127,8 @@ class TestCertificate(unittest.TestCase):
         # ensuring that test certificate is installed
         self._install_test_certificate()
 
-        # instantiating bound Certificate object
-        certificate = Certificate(
-            "assets/pycertmanager_test_password_123456.pfx",
-            "123456",
-        )
+        # instantiating Certificate object
+        certificate = Certificate(self.TEST_CERT_PATH, self.TEST_CERT_PASSWORD)
 
         # getting list with subject data
         subject_data = certificate.get_subject_data()
@@ -151,19 +140,6 @@ class TestCertificate(unittest.TestCase):
             "Subject data must have CN information from test certificate",
         )
 
-        # instantiating unbound Certificate object
-        certificate = Certificate()
-
-        # getting list with subject data
-        subject_data = certificate.get_subject_data()
-
-        # checking if it's correct
-        self.assertListEqual(
-            subject_data,
-            [],
-            "Subject data must be empty",
-        )
-
         # removing test certificate
         self._remove_test_certificate()
 
@@ -173,10 +149,10 @@ class TestCertificate(unittest.TestCase):
         # ensuring that test certificate is installed
         self._install_test_certificate()
 
-        # instantiating bound Certificate object
+        # instantiating Certificate object
         certificate = Certificate(
-            "assets/pycertmanager_test_password_123456.pfx",
-            "123456",
+            self.TEST_CERT_PATH,
+            self.TEST_CERT_PASSWORD,
         )
         correct_date = datetime(2023, 9, 28, 4, 6, 8)
 
@@ -199,11 +175,8 @@ class TestCertificate(unittest.TestCase):
         # ensuring that test certificate is installed
         self._install_test_certificate()
 
-        # instantiating bound Certificate object
-        certificate = Certificate(
-            "assets/pycertmanager_test_password_123456.pfx",
-            "123456",
-        )
+        # instantiating Certificate object
+        certificate = Certificate(self.TEST_CERT_PATH, self.TEST_CERT_PASSWORD)
         correct_date = datetime(2022, 9, 28, 3, 46, 8)
 
         # getting expiration date
@@ -221,7 +194,7 @@ class TestCertificate(unittest.TestCase):
 
     def _get_number_of_installed_certificates(self) -> int:
         """Help function to get number of installed certificates"""
-        command = "powershell.exe Get-ChildItem Cert:\CurrentUser\My"
+        command = f"powershell.exe Get-ChildItem {self.TEST_CERT_STORE_LOCATION}"
         result = subprocess.run(command, capture_output=True)
         try:
             num_of_certificates = result.stdout.decode("utf-8").strip().splitlines()[4:]
@@ -231,14 +204,13 @@ class TestCertificate(unittest.TestCase):
 
     def _install_test_certificate(self) -> None:
         """Help function to install test certificate"""
-        command = f"powershell.exe $password=ConvertTo-SecureString -String '123456' -AsPlainText -Force;"
-        command += f" Import-PfxCertificate -FilePath 'assets/pycertmanager_test_password_123456.pfx' -Password $password"
-        command += f" -CertStoreLocation Cert:\CurrentUser\My"
+        command = f"powershell.exe $password=ConvertTo-SecureString -String '{self.TEST_CERT_PASSWORD}' -AsPlainText -Force;"
+        command += f" Import-PfxCertificate -FilePath '{self.TEST_CERT_PATH}' -Password $password"
+        command += f" -CertStoreLocation {self.TEST_CERT_STORE_LOCATION}"
         subprocess.run(command, capture_output=True)
 
     def _remove_test_certificate(self) -> None:
         """Help function to remove test certificate"""
-        subprocess.run(
-            "powershell.exe Get-ChildItem Cert:\CurrentUser\My | Where-Object Subject -match 'pycertmanager.test' | Remove-Item",
-            capture_output=True,
-        )
+        command = f"powershell.exe Get-ChildItem {self.TEST_CERT_STORE_LOCATION} |"
+        command += f"Where-Object Subject -match '{self.TEST_CERT_CN}' | Remove-Item"
+        subprocess.run(command, capture_output=True)

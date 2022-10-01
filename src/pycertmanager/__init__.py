@@ -21,11 +21,7 @@ class Certificate:
         "machine": "Cert:\LocalMachine\My",
     }
 
-    def __init__(
-        self,
-        certificate_path: str | Path | None = None,
-        password: str | None = None,
-    ) -> None:
+    def __init__(self, certificate_path: str | Path, password: str) -> None:
         self._path = certificate_path
         self._password = password
         self._object = None
@@ -37,7 +33,7 @@ class Certificate:
             raise InvalidCertificatePassword() from exc
 
     def _validate_kwargs_and_read_certificate(self) -> None:
-        if type(self._path) not in [str, Path, type(None)]:
+        if type(self._path) not in [str, Path]:
             raise InvalidCertificatePath()
         if self._path is not None:
             with open(self._path, "rb") as certificate_data:
@@ -62,15 +58,16 @@ class Certificate:
         command += f" -CertStoreLocation {store_location_value} {'-Exportable' if exportable else ''}"
         subprocess.run(command, capture_output=not verbose)
 
+    @classmethod
     def remove(
-        self,
+        cls,
         cn: str,
         store_location: Literal["user", "machine"] = "user",
         verbose: bool = False,
     ) -> None:
         """Search certificate by CN (Common Name) and remove it"""
         try:
-            store_location_value = self.STORE_LOCATIONS[store_location]
+            store_location_value = cls.STORE_LOCATIONS[store_location]
         except KeyError as exc:
             raise InvalidStoreLocation() from exc
         command = f"powershell.exe Get-ChildItem {store_location_value} |"
@@ -78,23 +75,13 @@ class Certificate:
         subprocess.run(command, capture_output=not verbose)
 
     def get_subject_data(self) -> list[str]:
-        """Returns a list with certificate's subject data. If the
-        certificate object is not file bound, returns an empty list"""
-        if self._object is not None:
-            return [c.rfc4514_string() for c in self._object.subject.rdns]
-        return []
+        """Returns a list with certificate's subject data"""
+        return [c.rfc4514_string() for c in self._object.subject.rdns]
 
     def get_expiration_date(self) -> datetime | None:
-        """Returns datetime object with certificate's experation date. If
-        the certificate object is not file bound, returns None"""
-        if self._object is not None:
-            return self._object.not_valid_after
-        return None
+        """Returns datetime object with certificate's experation date"""
+        return self._object.not_valid_after
 
     def get_issue_date(self) -> datetime | None:
-        """Returns datetime object with a date the certificate was
-        issued. If the certificate object is not file bound, returns
-        None"""
-        if self._object is not None:
-            return self._object.not_valid_before
-        return None
+        """Returns datetime object with the date the certificate was issued"""
+        return self._object.not_valid_before
