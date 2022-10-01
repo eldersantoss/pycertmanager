@@ -2,8 +2,8 @@ import unittest
 import subprocess
 from datetime import datetime
 
-from pycertmanager import Certificate
-from pycertmanager.exceptions import (
+from src.pycertmanager import Certificate
+from src.pycertmanager.exceptions import (
     InvalidCertificatePath,
     InvalidCertificatePassword,
     InvalidStoreLocation,

@@ -7,7 +7,7 @@ from datetime import datetime
 
 from cryptography.hazmat.primitives.serialization import pkcs12
 
-from pycertmanager.exceptions import (
+from .exceptions import (
     InvalidCertificatePath,
     InvalidCertificatePassword,
     InvalidStoreLocation,
