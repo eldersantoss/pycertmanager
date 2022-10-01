@@ -130,7 +130,7 @@ class TestCertificate(unittest.TestCase):
         # instantiating Certificate object
         certificate = Certificate(self.TEST_CERT_PATH, self.TEST_CERT_PASSWORD)
 
-        # getting list with subject data
+        # getting a list with subject data
         subject_data = certificate.get_subject_data()
 
         # checking if it's correct
@@ -179,7 +179,7 @@ class TestCertificate(unittest.TestCase):
         certificate = Certificate(self.TEST_CERT_PATH, self.TEST_CERT_PASSWORD)
         correct_date = datetime(2022, 9, 28, 3, 46, 8)
 
-        # getting expiration date
+        # getting issue date
         issue_date = certificate.get_issue_date()
 
         # checking if it's correct
