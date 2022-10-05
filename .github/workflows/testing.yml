@@ -29,6 +29,7 @@ jobs:
     - uses: schneegans/dynamic-badges-action@v1.4.0
     - name: Get percente covered value
       run: |
-        $json = Get-Content coverage.json | ConvertFrom-Json
+        $cov-data = Get-Content coverage.json
+        $json = ConvertFrom-Json $cov-data
         $env:COVERAGE = $json.totals.percent_covered
         $env:COVERAGE
