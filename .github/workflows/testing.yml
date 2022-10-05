@@ -36,6 +36,8 @@ jobs:
         $json = ConvertFrom-Json $data
         [System.Environment]::SetEnvironmentVariable('COVERAGE',$json.totals.percent_covered)
         $env:COVERAGE
+    - name: Validating covered value
+      run: $env:COVERAGE
     - name: Update coverage badge
       uses: schneegans/dynamic-badges-action@v1.4.0
       with:
