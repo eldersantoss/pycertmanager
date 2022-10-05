@@ -2,9 +2,12 @@ name: Testing python package
 
 on:
   push:
-    branches: [ "dev", "main" ]
+    branches:
+      - "main"
+      - "dev"
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main" 
 
 permissions:
   contents: read
