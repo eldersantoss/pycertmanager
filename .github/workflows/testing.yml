@@ -29,7 +29,6 @@ jobs:
       run: |
         coverage run -m unittest
         coverage json
-    - uses: schneegans/dynamic-badges-action@v1.4.0
     - name: Get percente covered value
       run: |
         $cov-data = Get-Content coverage.json
