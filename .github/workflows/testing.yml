@@ -1,4 +1,4 @@
-name: Testing python package
+name: testing
 
 on:
   push:
@@ -39,11 +39,11 @@ jobs:
     - name: Update coverage badge
       uses: schneegans/dynamic-badges-action@v1.4.0
       with:
-        auth: ${{ secrets.GIST_SECRET }}
+        auth: ${{ secrets:GIST_SECRET }}
         gistID: c26a50f51f846509ef4ca4ab5c37909b
         filename: coverage.json
         label: coverage
-        message: ${{ env.COVERAGE }}
-        valColorRange: ${{ env.COVERAGE }}
+        message: ${{ env:COVERAGE }}%
+        valColorRange: ${{ env:COVERAGE }}
         maxColorRange: 100
         minColorRange: 0

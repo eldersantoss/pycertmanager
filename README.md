@@ -8,10 +8,11 @@ to need to install and remove them from operating system, or even obtain some
 information like expiration date or issuer of these objects. So this module
 was made for provide these operations programmatically and easily.
 
-![License](https://img.shields.io/github/license/eldersantoss/pycertmanager)
-![Issues](https://img.shields.io/github/issues/eldersantoss/pycertmanager)
-![Version](https://img.shields.io/pypi/v/pycertmanager)
+[![License](https://img.shields.io/github/license/eldersantoss/pycertmanager)](https://github.com/eldersantoss/pycertmanager/blob/main/LICENSE)
+[![Issues](https://img.shields.io/github/issues/eldersantoss/pycertmanager)](https://github.com/eldersantoss/pycertmanager/issues)
+[![Version](https://img.shields.io/pypi/v/pycertmanager)](https://pypi.org/project/pycertmanager/)
 [![Testing](https://github.com/eldersantoss/pycertmanager/actions/workflows/testing.yml/badge.svg)](https://github.com/eldersantoss/pycertmanager/actions/workflows/testing.yml)
+![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/eldersantoss/c26a50f51f846509ef4ca4ab5c37909b/raw/coverage.json)
 
 ## Table of content
 
