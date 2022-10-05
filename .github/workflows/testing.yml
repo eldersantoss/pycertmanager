@@ -36,6 +36,9 @@ jobs:
         $json = ConvertFrom-Json $data
         [System.Environment]::SetEnvironmentVariable('COVERAGE',$json.totals.percent_covered)
         $env:COVERAGE
+        ls env:
+      env:
+        COVERAGE: 
     - name: Validating covered value
       run: $env:COVERAGE
     - name: Update coverage badge
