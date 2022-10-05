@@ -36,3 +36,7 @@ push = false
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
 "src/pycertmanager/__init__.py" = ["{version}"]
+
+[tool.coverage.run]
+source = ["."]
+omit = ["*/tests/*"]
