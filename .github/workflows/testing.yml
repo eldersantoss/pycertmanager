@@ -32,7 +32,7 @@ jobs:
         coverage json
     - name: Get percente covered value
       run: |
-        $cov-data = Get-Content coverage.json
-        $json = ConvertFrom-Json $cov-data
+        $data = Get-Content coverage.json
+        $json = ConvertFrom-Json $data
         $env:COVERAGE = $json.totals.percent_covered
         $env:COVERAGE
