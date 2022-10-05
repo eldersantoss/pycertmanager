@@ -34,8 +34,8 @@ jobs:
       run: |
         $data = Get-Content coverage.json
         $json = ConvertFrom-Json $data
-        $env:COVERAGE = $json.totals.percent_covered
-        $env:COVERAGE    
+        [System.Environment]::SetEnvironmentVariable('COVERAGE',$json.totals.percent_covered)
+        $env:COVERAGE
     - name: Update coverage badge
       uses: schneegans/dynamic-badges-action@v1.4.0
       with:
