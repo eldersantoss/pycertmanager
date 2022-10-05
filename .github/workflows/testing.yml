@@ -35,4 +35,15 @@ jobs:
         $data = Get-Content coverage.json
         $json = ConvertFrom-Json $data
         $env:COVERAGE = $json.totals.percent_covered
-        $env:COVERAGE
+        $env:COVERAGE    
+    - name: Update coverage badge
+      uses: schneegans/dynamic-badges-action@v1.4.0
+      with:
+        auth: ${{ secrets.GIST_SECRET }}
+        gistID: c26a50f51f846509ef4ca4ab5c37909b
+        filename: coverage.json
+        label: coverage
+        message: ${{ env.COVERAGE }}
+        valColorRange: ${{ env.COVERAGE }}
+        maxColorRange: 100
+        minColorRange: 0
