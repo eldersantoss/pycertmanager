@@ -34,9 +34,8 @@ jobs:
       run: |
         $data = Get-Content coverage.json
         $json = ConvertFrom-Json $data
-        [System.Environment]::SetEnvironmentVariable('COVERAGE',$json.totals.percent_covered)
-        $env:COVERAGE
-        ls env:
+        $COVERAGE = $json.totals.percent_covered
+        echo $COVERAGE >> $env:GITHUB_ENV
       env:
         COVERAGE: 
     - name: Validating covered value
