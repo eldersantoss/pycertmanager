@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "pycertmanager"
 version = "0.0.2"
 authors = [{ name = "Elder Santos", email = "elder_rn@hotmail.com" }]
-description = "Module to assist in the programmatic management of PFX and P12 digital certificates"
+description = "Module to assist in the programmatic management of PFX digital certificates"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
@@ -19,7 +19,7 @@ dependencies = ["cryptography >= 38.0.1"]
 
 [project.optional-dependencies]
 build = ["build", "twine"]
-dev = ["black", "bumpver"]
+dev = ["black", "bumpver", "coverage"]
 
 [project.urls]
 "Homepage" = "https://github.com/eldersantoss/pycertmanager"
@@ -29,8 +29,8 @@ dev = ["black", "bumpver"]
 current_version = "0.0.2"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
-commit = false
-tag = false
+commit = true
+tag = true
 push = false
 
 [tool.bumpver.file_patterns]
