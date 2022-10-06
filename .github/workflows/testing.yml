@@ -34,8 +34,7 @@ jobs:
       run: |
         $data = Get-Content coverage.json
         $json = ConvertFrom-Json $data
-        $COVERAGE = $json.totals.percent_covered
-        echo $COVERAGE >> $env:GITHUB_ENV
+        echo ("COVERAGE=" + $json.totals.percent_covered) >> $env:GITHUB_ENV
     - name: Validating covered value
       run: $env:COVERAGE
     - name: Update coverage badge
