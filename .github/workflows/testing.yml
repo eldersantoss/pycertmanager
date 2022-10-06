@@ -30,14 +30,12 @@ jobs:
       run: |
         coverage run -m unittest
         coverage json
-    - name: Get percente covered value
+    - name: Get percent covered value
       run: |
         $data = Get-Content coverage.json
         $json = ConvertFrom-Json $data
         $COVERAGE = $json.totals.percent_covered
         echo $COVERAGE >> $env:GITHUB_ENV
-      env:
-        COVERAGE: 
     - name: Validating covered value
       run: $env:COVERAGE
     - name: Update coverage badge
