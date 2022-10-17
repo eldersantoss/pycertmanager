@@ -28,8 +28,6 @@ jobs:
       - name: Check PATCH changes
         if: "startsWith(github.event.pull_request.title, 'fix:')"
         run: echo "VERSION_COMPONENT=patch" >> $GITHUB_ENV
-      - name: Print VERSION_COMPONENT env
-        run: echo ${{ env.VERSION_COMPONENT }}
       - name: Bump version
         run: |
           git config --global user.email "elder_rn@hotmail.com"
