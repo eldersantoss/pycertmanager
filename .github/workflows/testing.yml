@@ -1,0 +1,41 @@
+name: Testing
+
+on: [push, pull_request]
+  
+permissions:
+  contents: read
+
+jobs:
+  testing:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install coverage
+      - name: Test and generate coverage json report
+        run: |
+          coverage run -m unittest
+          coverage json
+      - name: Get percent covered value
+        run: |
+          $data = Get-Content coverage.json
+          $json = ConvertFrom-Json $data
+          echo ("COVERAGE=" + $json.totals.percent_covered) >> $env:GITHUB_ENV
+      - name: Update coverage badge
+        uses: schneegans/dynamic-badges-action@v1.4.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: c26a50f51f846509ef4ca4ab5c37909b
+          filename: coverage.json
+          label: coverage
+          message: ${{ env.COVERAGE }}%
+          valColorRange: ${{ env.COVERAGE }}
+          maxColorRange: 100
+          minColorRange: 0
