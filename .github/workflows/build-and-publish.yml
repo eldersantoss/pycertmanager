@@ -39,4 +39,4 @@ jobs:
         run: |
           python -m build
           twine check dist/*
-          twine upload -r testpypi dist/*
+          twine upload -r testpypi dist/* -u ${{ secrets.TWINE_USERNAME }} -p ${{ secrets.TWINE_PASSWORD }}

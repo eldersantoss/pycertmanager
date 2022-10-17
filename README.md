@@ -12,7 +12,7 @@ was made for provide these operations programmatically and easily.
 [![Issues](https://img.shields.io/github/issues/eldersantoss/pycertmanager)](https://github.com/eldersantoss/pycertmanager/issues)
 [![Version](https://img.shields.io/pypi/v/pycertmanager)](https://pypi.org/project/pycertmanager/)
 [![Last commit](https://img.shields.io/github/last-commit/eldersantoss/pycertmanager)](https://github.com/eldersantoss/pycertmanager/commits/main)
-[![Tesing](https://github.com/eldersantoss/pycertmanager/actions/workflows/tesing.yml/badge.svg)](https://github.com/eldersantoss/pycertmanager/actions/workflows/tesing.yml)
+[![Testing](https://github.com/eldersantoss/pycertmanager/actions/workflows/testing.yml/badge.svg)](https://github.com/eldersantoss/pycertmanager/actions/workflows/testing.yml)
 ![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/eldersantoss/c26a50f51f846509ef4ca4ab5c37909b/raw/coverage.json)
 
 ## Table of content
