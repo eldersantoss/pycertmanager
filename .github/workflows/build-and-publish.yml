@@ -32,7 +32,7 @@ jobs:
         run: |
           git config --global user.email "elder_rn@hotmail.com"
           git config --global user.name "Elder Santos"
-          bumpver update --${{ env.VERSION_COMPONENT }}
+          bumpver update -f --${{ env.VERSION_COMPONENT }}
       - name: Build and upload package
         run: |
           python -m build
